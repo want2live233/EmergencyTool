@@ -1,4 +1,4 @@
-package main
+package web
 
 import (
 	"fmt"
@@ -58,7 +58,7 @@ func checkWebProcess(processNameStr string) bool {
 	return false
 }
 
-func ProcessName() (pname []string) {
+func GetWebProcessInfo() (pname []string) {
 	pids, _ := process.Pids()
 	for _, pid := range pids {
 		pn, _ := process.NewProcess(pid)
@@ -142,34 +142,34 @@ func ProcessName() (pname []string) {
 			fmt.Print("\n")
 
 		} else {
-			//var connectionList []net.ConnectionStat
-			//connectionList, _ = pn.Connections()
-			//var portFlag = false
-			//for _, stat := range connectionList {
-			//	if stat.Status == "LISTEN" {
-			//		portFlag = true
-			//		fmt.Print(stat.Laddr.IP, ":", stat.Laddr.Port)
-			//		fmt.Print("\n")
-			//	}
-			//}
-			//if portFlag && strings.Index(processName, "[") != 0 {
-			//	fmt.Print(pn.Pid)
-			//	fmt.Print("\n")
-			//	fmt.Print(processName)
-			//	fmt.Print("\n")
-			//
-			//	var cwdPath string
-			//	cwdPath, _ = pn.Cwd()
-			//	fmt.Print(cwdPath)
-			//
-			//	fmt.Print("\n")
-			//
-			//	var cmdLine string
-			//	cmdLine, _ = pn.Cmdline()
-			//	fmt.Print(cmdLine)
-			//
-			//	fmt.Print("\n")
-			//}
+			var connectionList []net.ConnectionStat
+			connectionList, _ = pn.Connections()
+			var portFlag = false
+			for _, stat := range connectionList {
+				if stat.Status == "LISTEN" {
+					portFlag = true
+					fmt.Print(stat.Laddr.IP, ":", stat.Laddr.Port)
+					fmt.Print("\n")
+				}
+			}
+			if portFlag && strings.Index(processName, "[") != 0 {
+				fmt.Print(pn.Pid)
+				fmt.Print("\n")
+				fmt.Print(processName)
+				fmt.Print("\n")
+
+				var cwdPath string
+				cwdPath, _ = pn.Cwd()
+				fmt.Print(cwdPath)
+
+				fmt.Print("\n")
+
+				var cmdLine string
+				cmdLine, _ = pn.Cmdline()
+				fmt.Print(cmdLine)
+
+				fmt.Print("\n")
+			}
 		}
 
 		pName, _ := pn.Name()
@@ -179,6 +179,5 @@ func ProcessName() (pname []string) {
 }
 
 func main() {
-	//fmt.Print(ProcessName())
-	ProcessName()
+	GetWebProcessInfo()
 }

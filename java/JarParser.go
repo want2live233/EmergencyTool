@@ -1,14 +1,12 @@
-package main
+package java
 
 import (
 	"archive/zip"
 	"fmt"
 	"io/ioutil"
 	"log"
-	"os"
 	"path"
 	filepath "path/filepath"
-	"strconv"
 	"strings"
 )
 
@@ -27,7 +25,7 @@ func getTargetJarFile(pathname string) ([]string, error) {
 
 		// 是文件夹则递归进入获取;是文件，则压入数组
 		if fi.IsDir() {
-			temp, err := GetAllFile(fullname)
+			temp, err := getTargetJarFile(fullname)
 			if err != nil {
 				fmt.Printf("读取文件目录失败,fullname=%v, err=%v", fullname, err)
 				return result, err
@@ -86,14 +84,8 @@ func parseSingleJar(filename string) ([]string, []string) {
 	return packageList, jarList
 }
 
-func main() {
-	for idx, args := range os.Args {
-		fmt.Println("参数"+strconv.Itoa(idx)+":", args)
-	}
-	if len(os.Args) != 1 {
-		os.Exit(1)
-	}
-	targetJarPath := os.Args[1]
+func Start(targetJarPath string) {
+
 	var riskPackageList []string
 	var riskJarLIst []string
 	riskPackageList = []string{"com.thoughtworks.xstream", "com.alibaba.fastjson", "com.alibaba.dubbo", "org.apache.dubbo"}
@@ -129,4 +121,7 @@ func main() {
 		}
 
 	}
+}
+func main() {
+	Start("")
 }
