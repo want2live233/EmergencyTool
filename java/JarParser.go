@@ -1,6 +1,7 @@
 package java
 
 import (
+	"EmergencyTool/common"
 	"archive/zip"
 	"fmt"
 	"io/ioutil"
@@ -85,42 +86,49 @@ func parseSingleJar(filename string) ([]string, []string) {
 }
 
 func Start(targetJarPath string) {
-
-	var riskPackageList []string
-	var riskJarLIst []string
-	riskPackageList = []string{"com.thoughtworks.xstream", "com.alibaba.fastjson", "com.alibaba.dubbo", "org.apache.dubbo"}
-
-	riskJarLIst = []string{"xstream-", "fastjson-", "dubbo-"}
-
-	jarFilelist, _ := getTargetJarFile(targetJarPath)
-
 	var allPackageList []string
 	var allJarList []string
-	for _, s := range jarFilelist {
-		packageList, jarList := parseSingleJar(s)
+
+	var riskJarLIst []string
+	var riskClassList []string
+
+	var jarClassMap map[string]string
+	var classJarMap map[string]string
+	classJarMap = make(map[string]string)
+
+	jarClassMap = common.ReadConfigFile("./config/config.txt")
+	for key, value := range jarClassMap {
+		riskJarLIst = append(riskJarLIst, key)
+		riskClassList = append(riskClassList, value)
+		classJarMap[value] = key
+	}
+
+	jarFileList, _ := getTargetJarFile(targetJarPath)
+
+	for _, _jarFile := range jarFileList {
+		packageList, jarList := parseSingleJar(_jarFile)
 		allPackageList = append(allPackageList, packageList...)
 		allJarList = append(allJarList, jarList...)
-	}
 
-	for _, s := range allPackageList {
-		s = strings.ReplaceAll(s, "/", ".")[:len(s)-1]
-		for _, s2 := range riskPackageList {
-			if strings.Contains(s, s2) {
-				fmt.Println("有风险：", s)
-			}
-		}
-	}
-
-	fmt.Print("======================\n")
-
-	for _, s := range allJarList {
-		for _, s2 := range riskJarLIst {
-			if strings.Contains(s, s2) {
-				fmt.Println("有风险：", s)
+		for _, s := range packageList {
+			s = strings.ReplaceAll(s, "/", ".")[:len(s)-1]
+			for _, s2 := range riskClassList {
+				if strings.Contains(s, s2) {
+					fmt.Println(_jarFile, "危险类:", s)
+				}
 			}
 		}
 
+		for _, s := range jarList {
+			for _, s2 := range riskJarLIst {
+				if strings.Contains(s, s2) {
+					fmt.Println(_jarFile, "有风险:", s)
+				}
+			}
+
+		}
 	}
+
 }
 func main() {
 	Start("")
