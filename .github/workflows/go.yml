@@ -23,6 +23,7 @@ jobs:
 
     - name: Release
       uses: softprops/action-gh-release@v1
+      if: startsWith(github.ref, 'refs/tags/')
       with: # 将下述可执行文件 release 上去
         files: |
           main
