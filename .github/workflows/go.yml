@@ -20,3 +20,11 @@ jobs:
 
     - name: Build
       run: go build main.go
+
+    - name: Release
+      uses: softprops/action-gh-release@v1
+      with: # 将下述可执行文件 release 上去
+        files: |
+          main
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
