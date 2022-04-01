@@ -20,7 +20,7 @@ jobs:
         
     - name: env
       run: |
-        whoami
+        sudo apt-get install tar zip -y
         
     - name: Build
       run: | 
