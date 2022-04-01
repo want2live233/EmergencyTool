@@ -17,7 +17,11 @@ jobs:
       uses: actions/setup-go@v3
       with:
         go-version: 1.17
-
+        
+    - name: env
+      run: |
+        apt-get instlal tar zip -y
+        
     - name: Build
       run: | 
         CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o darwin-amd64-EmergencyTool main.go
@@ -25,15 +29,19 @@ jobs:
         CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o freebsd-amd64-EmergencyTool main.go
         CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o windows-amd64-EmergencyTool main.go
         CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o windows-386-EmergencyTool main.go
-
+        tar darwin-amd64-EmergencyTool.tar darwin-amd64-EmergencyTool config/config.txt
+        tar linux-amd64-EmergencyTool.tar linux-amd64-EmergencyTool config/config.txt
+        tar freebsd-amd64-EmergencyTool.tar freebsd-amd64-EmergencyTool config/config.txt
+        zip windows-amd64-EmergencyTool.zip windows-amd64-EmergencyTool config/config.txt
+        zip windows-386-EmergencyTool.zip windows-amd64-EmergencyTool config/config.txt
 
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
         files: |
-          darwin-amd64-EmergencyTool
-          linux-amd64-EmergencyTool
-          freebsd-amd64-EmergencyTool
-          windows-amd64-EmergencyTool
-          windows-386-EmergencyTool
-        tag_name: 2.1
+          darwin-amd64-EmergencyTool.tar
+          linux-amd64-EmergencyTool.tar
+          freebsd-amd64-EmergencyTool.tar
+          windows-amd64-EmergencyTool.zip
+          windows-386-EmergencyTool.zip
+        tag_name: 2.2
