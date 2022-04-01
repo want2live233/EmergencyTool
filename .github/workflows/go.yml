@@ -29,9 +29,9 @@ jobs:
         CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o freebsd-amd64-EmergencyTool main.go
         CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o windows-amd64-EmergencyTool main.go
         CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o windows-386-EmergencyTool main.go
-        tar darwin-amd64-EmergencyTool.tar darwin-amd64-EmergencyTool config/config.txt
-        tar linux-amd64-EmergencyTool.tar linux-amd64-EmergencyTool config/config.txt
-        tar freebsd-amd64-EmergencyTool.tar freebsd-amd64-EmergencyTool config/config.txt
+        tar -cvf darwin-amd64-EmergencyTool.tar darwin-amd64-EmergencyTool config/config.txt
+        tar -cvf linux-amd64-EmergencyTool.tar linux-amd64-EmergencyTool config/config.txt
+        tar -cvf freebsd-amd64-EmergencyTool.tar freebsd-amd64-EmergencyTool config/config.txt
         zip windows-amd64-EmergencyTool.zip windows-amd64-EmergencyTool config/config.txt
         zip windows-386-EmergencyTool.zip windows-amd64-EmergencyTool config/config.txt
 
