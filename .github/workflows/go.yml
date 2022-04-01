@@ -19,16 +19,21 @@ jobs:
         go-version: 1.17
 
     - name: Build
-      run: go build main.go
+      run: | 
+        CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -o darwin-amd64-EmergencyTool main.go
+        CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o linux-amd64-EmergencyTool main.go
+        CGO_ENABLED=0 GOOS=freebsd GOARCH=amd64 go build -o freebsd-amd64-EmergencyTool main.go
+        CGO_ENABLED=0 GOOS=windows GOARCH=amd64 go build -o windows-amd64-EmergencyTool main.go
+        CGO_ENABLED=0 GOOS=windows GOARCH=386 go build -o windows-386-EmergencyTool main.go
 
-    - name: upload artifacts
-      uses: actions/upload-artifact@v2
-      with:
-        name: main
-        path: main
 
     - name: Release
       uses: softprops/action-gh-release@v1
       with:
-        files: main
-        tag_name: 2.0
+        files: |
+          darwin-amd64-EmergencyTool
+          linux-amd64-EmergencyTool
+          freebsd-amd64-EmergencyTool
+          windows-amd64-EmergencyTool
+          windows-386-EmergencyTool
+        tag_name: 2.1
